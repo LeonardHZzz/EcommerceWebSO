@@ -1,0 +1,19 @@
+[Unit]
+Description=Ticketing FastAPI backend
+After=network.target
+
+[Service]
+Type=simple
+User=azureuser
+WorkingDirectory=/opt/ticketing-backend
+EnvironmentFile=/opt/ticketing-backend/.env
+ExecStart=/opt/ticketing-backend/venv/bin/gunicorn app.main:app \
+    -k uvicorn.workers.UvicornWorker \
+    -w 4 \
+    -b 127.0.0.1:8000 \
+    --timeout 120
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
