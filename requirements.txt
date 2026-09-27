@@ -12,14 +12,11 @@ bcrypt==4.2.1            # usado directamente en app/core/security.py (sin passl
 python-multipart==0.0.9
 qrcode[pil]==7.4.2
 
-# Driver de base de datos: MySQL (PyMySQL es puro Python, sin dependencias
-# nativas que compilar -- evita los problemas de wheels que ya tuvimos con
-# psycopg2 en Windows). "cryptography" es requerida por PyMySQL para el
-# plugin de autenticación caching_sha2_password / sha256_password que usa
+psycopg[binary]==3.2.10
 # MySQL 8+ por defecto.
-PyMySQL==1.1.1
-cryptography==43.0.3
 
 # Testing
 pytest==8.3.3
 httpx==0.27.2
+PyMySQL==1.1.1
+cryptography==43.0.1
