@@ -13,7 +13,7 @@ class UsuarioBase(BaseModel):
 
 
 class UsuarioCreate(UsuarioBase):
-    password: str
+    password: str  # texto plano en el request; se hashea en el service/crud
 
 
 class UsuarioOut(UsuarioBase):
@@ -22,6 +22,7 @@ class UsuarioOut(UsuarioBase):
     id_usuario: int
     rol: RolUsuario
     fecha_registro: datetime
+    # OJO: 'password' nunca se expone aquí
 
 
 class UsuarioLogin(BaseModel):

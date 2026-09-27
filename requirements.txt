@@ -5,14 +5,20 @@ SQLAlchemy==2.0.35
 alembic==1.13.3
 pydantic==2.9.2
 pydantic-settings==2.5.2
-email-validator==2.2.0  
+email-validator==2.2.0   # requerido por EmailStr en app/schemas/usuario.py
 python-dotenv==1.0.1
 python-jose[cryptography]==3.3.0
-bcrypt==4.2.1          
+bcrypt==4.2.1            # usado directamente en app/core/security.py (sin passlib, evita bugs de compatibilidad)
 python-multipart==0.0.9
 qrcode[pil]==7.4.2
 
-psycopg[binary]==3.2.10 
+# Driver de base de datos: MySQL (PyMySQL es puro Python, sin dependencias
+# nativas que compilar -- evita los problemas de wheels que ya tuvimos con
+# psycopg2 en Windows). "cryptography" es requerida por PyMySQL para el
+# plugin de autenticación caching_sha2_password / sha256_password que usa
+# MySQL 8+ por defecto.
+PyMySQL==1.1.1
+cryptography==43.0.3
 
 # Testing
 pytest==8.3.3

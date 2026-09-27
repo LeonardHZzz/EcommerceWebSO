@@ -7,6 +7,10 @@ import bcrypt
 from jose import jwt
 
 from app.core.config import settings
+
+# bcrypt trunca (por especificación del algoritmo) todo lo que exceda 72 bytes;
+# lo hacemos explícito aquí para no depender del comportamiento interno de la
+# librería ante contraseñas inusualmente largas.
 _MAX_BCRYPT_BYTES = 72
 
 
@@ -37,7 +41,14 @@ def decode_access_token(token: str) -> dict[str, Any]:
 
 def verify_webhook_signature(raw_body: bytes, signature: str, secret: str) -> bool:
     """
-    Verifica la firma de un webhook entrante
+    Verifica la firma HMAC-SHA256 de un webhook entrante (patrón usado por
+    Culqi, Niubiz, MercadoPago, Stripe, etc.): la pasarela firma el cuerpo
+    crudo de la petición con un secreto compartido, y nosotros recalculamos
+    la misma firma para confirmar que el request realmente vino de ella
+    (y no de alguien falseando un "pago completado").
+
+    `hmac.compare_digest` evita timing attacks al comparar (una comparación
+    ingenua con `==` filtra información por cuánto tiempo tarda en fallar).
     """
     if not secret or not signature:
         return False

@@ -8,7 +8,7 @@ from app.models.boleto import EstadoIngreso
 
 
 class CheckoutRequest(BaseModel):
-    """usuario carrito"""
+    """Lo que el usuario envía para confirmar la compra desde su carrito."""
     codigo_cupon: str | None = None
     metodo_pago: str
 

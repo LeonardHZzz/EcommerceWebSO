@@ -1,3 +1,7 @@
+# docker-compose.yml = conectado a tu MySQL real (DATABASE_URL en .env).
+# Para desarrollo local con MySQL propio (sin tocar el servidor real), usa
+# en su lugar: docker-compose.local.yml (ver README, sección "Modo local").
+
 services:
   api:
     build: .
@@ -6,8 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - .:/app         
+      - .:/app          # hot-reload de código en desarrollo
     command: >
       uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     restart: unless-stopped
-

@@ -12,7 +12,7 @@ router = APIRouter(prefix="/zonas", tags=["Zonas"])
 def obtener_zona(id_zona: int, db: Session = Depends(get_db)):
     """
     Consulta puntual de una zona (precio y disponibilidad en tiempo real).
-    para que el frontend valide stock justo antes de agregar al carrito.
+    Útil para que el frontend valide stock justo antes de agregar al carrito.
     """
     zona = zona_crud.get(db, id_zona)
     if not zona:

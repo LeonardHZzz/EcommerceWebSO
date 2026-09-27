@@ -16,7 +16,7 @@ router = APIRouter(prefix="/boletos", tags=["Boletos"])
 
 @router.get("/mis-boletos", response_model=list[BoletoOut])
 def mis_boletos(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
-    """todos los boletos del usuario autenticado a traves de todas sus ordenes."""
+    """Todos los boletos del usuario autenticado, a través de todas sus órdenes."""
     return boleto_crud.list_by_usuario(db, current_user.id_usuario)
 
 
@@ -27,7 +27,8 @@ def obtener_qr_boleto(
     db: Session = Depends(get_db),
 ):
     """
-    devuelve la imagen PNG del codigo QR del boleto
+    Devuelve la imagen PNG del código QR del boleto, lista para mostrar en
+    la app o imprimir. Solo el dueño del boleto (o un admin) puede verla.
     """
     boleto = boleto_crud.get(db, id_boleto)
     if not boleto:
@@ -48,7 +49,9 @@ def obtener_qr_boleto(
 )
 def validar_ingreso(payload: ValidarBoletoRequest, db: Session = Depends(get_db)):
     """
-    escaneo del codigo QR 
+    Escaneo del código QR en la puerta del evento (uso del staff/admin).
+    Si el boleto es válido, queda marcado como 'usado' de inmediato para
+    que no pueda reutilizarse.
     """
     valido, mensaje, boleto = boleto_crud.validar_ingreso(db, payload.codigo_qr)
     return ValidarBoletoResponse(

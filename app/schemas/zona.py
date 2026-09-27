@@ -10,7 +10,7 @@ class ZonaBase(BaseModel):
 
 
 class ZonaCreate(ZonaBase):
-    """capacidad_disponible"""
+    """capacidad_disponible se inicializa igual a capacidad_total al crear."""
     pass
 
 

@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+    # Secreto compartido con tu pasarela de pago (Culqi/Niubiz/MercadoPago/Stripe)
+    # para verificar que los webhooks de confirmación de pago son legítimos.
     WEBHOOK_SECRET: str = ""
 
     BACKEND_CORS_ORIGINS: List[str] = []

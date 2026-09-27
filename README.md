@@ -1,6 +1,8 @@
-# EcommerceWebSO# Ticketing API — Backend (FastAPI + SQLAlchemy)
+# Ticketing API — Backend (FastAPI + SQLAlchemy)
 
-Backend para el sistema de venta de boletos, conectado a la base de datos poblada en Azure. Implementa: catálogo de eventos/zonas, carrito de compras, checkout con generación de boletos y validación de cupones.
+Backend para el sistema de venta de boletos, conectado a la base de datos ya
+existente y poblada en Azure. Implementa: catálogo de eventos/zonas, carrito
+de compras, checkout con generación de boletos y validación de cupones.
 
 ## 1. Estructura
 
@@ -16,3 +18,4 @@ app/
 └── api/v1/            # routers/endpoints
 alembic/                # migraciones
 ```
+

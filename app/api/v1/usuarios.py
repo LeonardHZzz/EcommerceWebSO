@@ -30,7 +30,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @router.get("/me", response_model=UsuarioOut)
 def leer_perfil(current_user: Usuario = Depends(get_current_user)):
     """
-    Perfil del usuario autenticado
+    Perfil del usuario autenticado. A propósito NO recibe un id por URL:
+    el usuario se identifica por el token JWT (header Authorization),
+    nunca por un id que cualquiera podría cambiar en la URL.
     """
     return current_user
 
@@ -38,7 +40,10 @@ def leer_perfil(current_user: Usuario = Depends(get_current_user)):
 @router.get("/{id_usuario}", response_model=UsuarioOut, dependencies=[Depends(get_current_admin)])
 def obtener_usuario_por_id(id_usuario: int, db: Session = Depends(get_db)):
     """
-    Consulta cualquier usuario por su ID
+    Consulta cualquier usuario por su ID. A diferencia de /me, este sí
+    recibe el id por URL — pero por eso mismo solo un admin puede usarlo
+    (si no, cualquiera podría ver los datos de cualquier otro usuario
+    con solo cambiar el número en la URL).
     """
     user = usuario_crud.get(db, id_usuario)
     if not user:

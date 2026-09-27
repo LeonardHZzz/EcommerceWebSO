@@ -31,7 +31,8 @@ class CRUDBoleto:
 
     def validar_ingreso(self, db: Session, codigo_qr: str) -> tuple[bool, str, Boleto | None]:
         """
-        valida el boleto
+        Escaneo en puerta: valida el boleto y, si es válido, lo marca como
+        usado de una vez (evita que el mismo QR se reutilice dos veces).
         """
         boleto = self.get_by_codigo(db, codigo_qr)
         if not boleto:

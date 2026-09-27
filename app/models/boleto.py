@@ -18,7 +18,7 @@ class Boleto(Base):
 
     id_boleto: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     id_detalle: Mapped[int] = mapped_column(ForeignKey("Detalle_orden.id_detalle"), nullable=False)
-    codigo_qr: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
+    codigo_qr: Mapped[str] = mapped_column(String(191), unique=True, nullable=False, index=True)
     estado_ingreso: Mapped[EstadoIngreso] = mapped_column(
         Enum(EstadoIngreso), nullable=False, default=EstadoIngreso.valido
     )
