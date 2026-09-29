@@ -8,7 +8,7 @@ CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType]):
-    """CRUD genérico: evita repetir get/list/create/delete en cada entidad simple."""
+    """CRUD generico"""
 
     def __init__(self, model: Type[ModelType]):
         self.model = model

@@ -27,8 +27,7 @@ def obtener_qr_boleto(
     db: Session = Depends(get_db),
 ):
     """
-    Devuelve la imagen PNG del código QR del boleto, lista para mostrar en
-    la app o imprimir. Solo el dueño del boleto (o un admin) puede verla.
+    Devuelve la imagen PNG del codigo QR del boleto
     """
     boleto = boleto_crud.get(db, id_boleto)
     if not boleto:
@@ -49,9 +48,7 @@ def obtener_qr_boleto(
 )
 def validar_ingreso(payload: ValidarBoletoRequest, db: Session = Depends(get_db)):
     """
-    Escaneo del código QR en la puerta del evento (uso del staff/admin).
-    Si el boleto es válido, queda marcado como 'usado' de inmediato para
-    que no pueda reutilizarse.
+    Escaneo del codigo QR
     """
     valido, mensaje, boleto = boleto_crud.validar_ingreso(db, payload.codigo_qr)
     return ValidarBoletoResponse(

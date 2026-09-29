@@ -1,10 +1,5 @@
 """
-Pobla datos de demostración estilo "Sugoi Fest": 1 categoría, 1 recinto,
-1 evento con 3 zonas, y 1 cupón de descuento. Es idempotente (se puede
-correr varias veces sin duplicar datos).
-
-Uso:
-    docker compose -f docker-compose.local.yml exec api python -m app.scripts.seed_demo
+Pobla datos de demostracion
 """
 from datetime import datetime, timedelta, timezone
 

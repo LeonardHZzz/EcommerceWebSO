@@ -1,7 +1,3 @@
-# docker-compose.yml = conectado a tu MySQL real (DATABASE_URL en .env).
-# Para desarrollo local con MySQL propio (sin tocar el servidor real), usa
-# en su lugar: docker-compose.local.yml (ver README, sección "Modo local").
-
 services:
   api:
     build: .

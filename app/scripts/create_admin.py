@@ -1,15 +1,5 @@
 """
 Promueve un usuario ya registrado a rol 'admin'.
-
-No existe (a propósito) un endpoint público para esto: crear admins debe
-ser una acción manual de quien opera el sistema, no algo alcanzable desde
-la API por cualquier usuario registrado.
-
-Uso (con el stack local corriendo):
-    docker compose -f docker-compose.local.yml exec api python -m app.scripts.create_admin correo@ejemplo.com
-
-Uso en la VM de Azure (dentro del contenedor o del venv):
-    python -m app.scripts.create_admin correo@ejemplo.com
 """
 import sys
 

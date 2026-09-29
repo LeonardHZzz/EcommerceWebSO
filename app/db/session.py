@@ -5,8 +5,6 @@ from sqlalchemy.orm import sessionmaker, Session
 
 from app.core.config import settings
 
-# pool_pre_ping evita errores "MySQL server has gone away" por conexiones
-# idle cerradas del lado del servidor tras superar su wait_timeout.
 engine = create_engine(
     settings.DATABASE_URL,
     pool_pre_ping=True,

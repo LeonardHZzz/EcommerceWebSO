@@ -26,8 +26,6 @@ class CRUDZona:
 
     def update(self, db: Session, zona: Zona, obj_in: ZonaUpdate) -> Zona:
         data = obj_in.model_dump(exclude_unset=True)
-        # Si se sube la capacidad_total, aumenta la disponible en la misma proporción;
-        # si se baja, no reduce por debajo de lo ya vendido.
         if "capacidad_total" in data:
             diferencia = data["capacidad_total"] - zona.capacidad_total
             zona.capacidad_disponible = max(0, zona.capacidad_disponible + diferencia)

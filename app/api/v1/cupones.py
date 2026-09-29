@@ -18,12 +18,10 @@ router = APIRouter(prefix="/cupones", tags=["Cupones"])
 def validar_cupon(
     payload: CuponValidarRequest,
     db: Session = Depends(get_db),
-    _user=Depends(get_current_user),  # requiere login, pero cualquier usuario autenticado
+    _user=Depends(get_current_user), 
 ):
     """
-    Valida un cupón SIN consumir un uso todavía (se usa para mostrar el
-    descuento en el carrito antes de confirmar la compra). El consumo real
-    del uso ocurre recién en /ordenes/checkout.
+    Valida un cupon sin consumir
     """
     valido, mensaje, cupon = cupon_crud.validar(db, payload.codigo)
     return CuponValidarResponse(
@@ -31,9 +29,6 @@ def validar_cupon(
         porcentaje_descuento=cupon.porcentaje_descuento if cupon else None,
         mensaje=mensaje,
     )
-
-
-# ---- Administración (solo admin) ----
 
 @router.get("", response_model=list[CuponOut], dependencies=[Depends(get_current_admin)])
 def listar_cupones(db: Session = Depends(get_db)):
