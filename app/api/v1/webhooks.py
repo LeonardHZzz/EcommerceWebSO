@@ -19,7 +19,24 @@ async def webhook_pago(
     x_webhook_signature: str = Header(..., alias="X-Webhook-Signature"),
 ):
     """
-    Notificacion de la pasarela de pago
+    Notificación de la pasarela de pago (Culqi, Niubiz, MercadoPago, Stripe,
+    etc.) sobre el resultado de un cobro. Este endpoint NO usa JWT — no tiene
+    sentido pedirle un token de usuario a la pasarela — sino que verifica una
+    firma HMAC del cuerpo crudo, calculada con un secreto compartido
+    (`WEBHOOK_SECRET`) que configuras también en el panel de tu proveedor.
+
+    Body esperado (ajusta el parsing exacto al formato real de tu pasarela;
+    esto es el "contrato interno" mínimo, ver app/schemas/webhook.py):
+        {"id_orden": 1, "estado": "completado", "referencia_pago": "ch_xxx"}
+
+    Cómo probarlo en local, generando la firma a mano:
+        BODY='{"id_orden": 1, "estado": "completado"}'
+        SECRET="tu-webhook-secret"
+        FIRMA=$(echo -n "$BODY" | openssl dgst -sha256 -hmac "$SECRET" | sed 's/^.* //')
+        curl -X POST http://localhost:8000/api/v1/webhooks/pagos \
+             -H "Content-Type: application/json" \
+             -H "X-Webhook-Signature: $FIRMA" \
+             -d "$BODY"
     """
     raw_body = await request.body()
 
@@ -33,6 +50,11 @@ async def webhook_pago(
         raise HTTPException(status_code=404, detail="Orden no encontrada")
 
     estado_destino = EstadoPago.completado if payload.estado == "completado" else EstadoPago.cancelado
+
+    # Idempotencia: las pasarelas de pago reintentan el webhook si no reciben
+    # un 200 a tiempo (timeout, caída momentánea, etc.). Si la orden YA está
+    # en el estado notificado, respondemos 200 sin volver a aplicar el efecto
+    # (evita, por ejemplo, "cancelar" dos veces y devolver el cupón dos veces).
     if orden.estado_pago == estado_destino:
         return orden
 

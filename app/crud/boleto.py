@@ -30,9 +30,6 @@ class CRUDBoleto:
         )
 
     def validar_ingreso(self, db: Session, codigo_qr: str) -> tuple[bool, str, Boleto | None]:
-        """
-        valida el boleto
-        """
         boleto = self.get_by_codigo(db, codigo_qr)
         if not boleto:
             return False, "El código QR no corresponde a ningún boleto.", None

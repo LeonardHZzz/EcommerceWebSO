@@ -8,7 +8,6 @@ CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType]):
-    """CRUD generico"""
 
     def __init__(self, model: Type[ModelType]):
         self.model = model

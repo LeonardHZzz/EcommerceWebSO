@@ -1,6 +1,3 @@
-"""
-Promueve un usuario ya registrado a rol 'admin'.
-"""
 import sys
 
 from app.db.session import SessionLocal

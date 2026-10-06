@@ -13,7 +13,16 @@ class UsuarioBase(BaseModel):
 
 
 class UsuarioCreate(UsuarioBase):
-    password: str 
+    password: str  # texto plano en el request; se hashea en el service/crud
+
+
+class UsuarioUpdate(BaseModel):
+    """Todos los campos opcionales: solo se actualiza lo que el request envía."""
+    nombre: str | None = None
+    apellido: str | None = None
+    telefono: str | None = None
+    email: EmailStr | None = None
+    password: str | None = None  # si se envía, se re-hashea; si no, no se toca
 
 
 class UsuarioOut(UsuarioBase):
@@ -22,6 +31,7 @@ class UsuarioOut(UsuarioBase):
     id_usuario: int
     rol: RolUsuario
     fecha_registro: datetime
+    # OJO: 'password' nunca se expone aquí
 
 
 class UsuarioLogin(BaseModel):

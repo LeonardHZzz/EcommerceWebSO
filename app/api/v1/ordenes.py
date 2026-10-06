@@ -61,7 +61,8 @@ def cancelar(
     db: Session = Depends(get_db),
 ):
     """
-    El dueño de la orden (o un admin) puede cancelarla.
+    El dueño de la orden (o un admin) puede cancelarla. Revierte el stock
+    de las zonas involucradas y anula los boletos ya generados.
     """
     orden = _get_orden_o_404(db, id_orden)
     if orden.id_usuario != current_user.id_usuario and current_user.rol.value != "admin":
@@ -70,6 +71,10 @@ def cancelar(
         return cancelar_orden(db, orden)
     except CompraError:
         raise
+
+
+# ---- Solo admin: confirmar pago (simula webhook de pasarela) y ver todas las órdenes ----
+
 @router.get("/admin/todas", response_model=list[OrdenOut], dependencies=[Depends(get_current_admin)])
 def listar_todas_las_ordenes(db: Session = Depends(get_db)):
     return db.query(Orden).all()
@@ -82,7 +87,9 @@ def listar_todas_las_ordenes(db: Session = Depends(get_db)):
 )
 def confirmar(id_orden: int, db: Session = Depends(get_db)):
     """
-    Marca la orden como pagada/completada
+    Marca la orden como pagada/completada. En producción esto lo dispara el
+    webhook de la pasarela de pago; se deja también accesible a un admin
+    para pruebas manuales o conciliación.
     """
     orden = _get_orden_o_404(db, id_orden)
     return confirmar_pago(db, orden)

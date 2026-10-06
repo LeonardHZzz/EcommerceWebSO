@@ -10,6 +10,9 @@ from app.schemas.zona import ZonaCreate, ZonaOut, ZonaUpdate
 
 router = APIRouter(prefix="/eventos", tags=["Eventos"])
 
+
+# ---- Catálogo público ----
+
 @router.get("", response_model=list[EventoOut])
 def listar_eventos(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
     """Catálogo público de eventos (ej. Sugoi Fest 2027), con sus zonas y precios."""
@@ -22,6 +25,9 @@ def obtener_evento(id_evento: int, db: Session = Depends(get_db)):
     if not evento:
         raise HTTPException(status_code=404, detail="Evento no encontrado")
     return evento
+
+
+# ---- Administración (solo admin) ----
 
 @router.post("", response_model=EventoOut, status_code=201, dependencies=[Depends(get_current_admin)])
 def crear_evento(payload: EventoCreate, db: Session = Depends(get_db)):
@@ -47,6 +53,9 @@ def eliminar_evento(id_evento: int, db: Session = Depends(get_db)):
     if not evento:
         raise HTTPException(status_code=404, detail="Evento no encontrado")
     evento_crud.delete(db, id_evento)
+
+
+# ---- Zonas de un evento (anidado bajo /eventos, admin) ----
 
 @router.post(
     "/{id_evento}/zonas",

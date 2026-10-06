@@ -7,7 +7,6 @@ import bcrypt
 from jose import jwt
 
 from app.core.config import settings
-
 _MAX_BCRYPT_BYTES = 72
 
 
@@ -37,9 +36,6 @@ def decode_access_token(token: str) -> dict[str, Any]:
 
 
 def verify_webhook_signature(raw_body: bytes, signature: str, secret: str) -> bool:
-    """
-    Verifica la firma
-    """
     if not secret or not signature:
         return False
     firma_esperada = hmac.new(secret.encode("utf-8"), raw_body, hashlib.sha256).hexdigest()

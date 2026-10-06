@@ -1,6 +1,3 @@
-"""
-Pobla datos de demostracion
-"""
 from datetime import datetime, timedelta, timezone
 
 from app.db.session import SessionLocal

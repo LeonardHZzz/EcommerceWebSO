@@ -34,7 +34,7 @@ def procesar_checkout(
     codigo_cupon: str | None = None,
 ) -> Orden:
     """
-    Flujo completo de compra
+    Flujo completo de compra, tal como lo modela el ERD:
 
     1. Lee los ítems del carrito del usuario.
     2. Bloquea y valida disponibilidad de cada zona (evita overselling).
@@ -43,12 +43,17 @@ def procesar_checkout(
     5. Genera N boletos individuales por cada detalle (cantidad comprada).
     6. Descuenta capacidad_disponible de cada zona y usos del cupón.
     7. Vacía el carrito.
+
+    Todo dentro de una sola transacción: si algo falla, se hace rollback
+    completo (no queremos una orden a medias sin boletos, o boletos sin orden).
     """
     items_carrito = db.query(CarritoCompra).filter(CarritoCompra.id_usuario == id_usuario).all()
     if not items_carrito:
         raise CompraError("El carrito está vacío.")
 
     try:
+        # Bloqueo pesimista de las zonas involucradas para evitar condiciones
+        # de carrera si dos usuarios compran la última entrada al mismo tiempo.
         zona_ids = [item.id_zona for item in items_carrito]
         zonas = (
             db.query(Zona)
@@ -86,7 +91,7 @@ def procesar_checkout(
             metodo_pago=metodo_pago,
         )
         db.add(orden)
-        db.flush() 
+        db.flush()  # obtiene id_orden sin cerrar la transacción
 
         for item in items_carrito:
             zona = zonas_by_id[item.id_zona]
@@ -100,8 +105,9 @@ def procesar_checkout(
                 subtotal=subtotal,
             )
             db.add(detalle)
-            db.flush() 
+            db.flush()  # obtiene id_detalle
 
+            # Un boleto individual por cada unidad comprada en este detalle
             for i in range(1, item.cantidad + 1):
                 boleto = Boleto(
                     id_detalle=detalle.id_detalle,
@@ -114,8 +120,11 @@ def procesar_checkout(
         if cupon:
             cupon.usos_disponibles -= 1
 
+        # Vacía el carrito ya procesado
         db.query(CarritoCompra).filter(CarritoCompra.id_usuario == id_usuario).delete()
 
+        # Aquí normalmente se llamaría a la pasarela de pago antes de marcar
+        # como completado. Se deja pendiente y se confirma vía webhook/endpoint aparte.
         db.commit()
         db.refresh(orden)
         return orden
@@ -130,7 +139,9 @@ def procesar_checkout(
 
 def confirmar_pago(db: Session, orden: Orden) -> Orden:
     """
-    Marca la orden como completada
+    Marca la orden como completada. En un flujo real, esto lo dispara el
+    webhook de la pasarela de pago tras confirmar el cobro; aquí se expone
+    también como endpoint admin para poder probar el flujo manualmente.
     """
     if orden.estado_pago != EstadoPago.pendiente:
         raise CompraError(f"La orden ya está en estado '{orden.estado_pago.value}', no se puede confirmar.")
@@ -144,7 +155,10 @@ def confirmar_pago(db: Session, orden: Orden) -> Orden:
 
 def cancelar_orden(db: Session, orden: Orden) -> Orden:
     """
-    Cancela una orden (pendiente o completada)
+    Cancela una orden (pendiente o completada) y revierte su efecto:
+    - Devuelve la capacidad_disponible a cada zona involucrada.
+    - Anula todos los boletos emitidos en esa orden (no se pueden usar en puerta).
+    - Si se usó un cupón, le devuelve el uso consumido.
     """
     if orden.estado_pago == EstadoPago.cancelado:
         raise CompraError("La orden ya estaba cancelada.")
