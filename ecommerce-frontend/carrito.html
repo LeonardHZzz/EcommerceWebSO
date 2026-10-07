@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu carrito — YumeEvent</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container cart-page">
+    <h1>Tu carrito</h1>
+
+    <div class="cart-layout">
+      <section class="cart-items" id="cart-items">
+        <p>Cargando tu carrito...</p>
+      </section>
+
+      <aside class="cart-summary" id="cart-summary">
+        <h3>Resumen</h3>
+
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span id="summary-subtotal">S/ 0.00</span>
+        </div>
+        <div class="summary-line summary-discount" id="summary-discount-row" hidden>
+          <span id="summary-discount-label">Descuento</span>
+          <span id="summary-discount-value">- S/ 0.00</span>
+        </div>
+        <div class="summary-line summary-total">
+          <span>Total</span>
+          <span id="summary-total">S/ 0.00</span>
+        </div>
+
+        <div class="coupon-box">
+          <label for="coupon-input">Cupón de descuento</label>
+          <div class="coupon-row">
+            <input type="text" id="coupon-input" placeholder="Ej: SUGOI10">
+            <button class="btn btn-ghost" id="coupon-apply">Aplicar</button>
+          </div>
+          <p class="coupon-feedback" id="coupon-feedback"></p>
+        </div>
+
+        <div class="field">
+          <label for="metodo-pago">Método de pago</label>
+          <select id="metodo-pago">
+            <option value="tarjeta">Tarjeta de crédito/débito</option>
+            <option value="yape">Yape</option>
+            <option value="plin">Plin</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="checkout-btn">Confirmar compra</button>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- Pasarela de pago SIMULADA: no procesa pagos reales. -->
+<div class="pasarela-overlay" id="pasarela-overlay"></div>
+<div class="pasarela-modal" id="pasarela-modal" aria-hidden="true">
+
+  <div class="pasarela-step" id="pasarela-step-form">
+    <div class="pasarela-head">
+      <h3>Pagar pedido</h3>
+      <button class="drawer-close" id="pasarela-close">✕</button>
+    </div>
+    <p class="pasarela-demo-note">Esta es una pasarela simulada con fines de prueba — no se procesa ningún pago real.</p>
+    <p class="pasarela-total">Total a pagar: <strong id="pasarela-total">S/ 0.00</strong></p>
+
+    <div id="pasarela-campos"></div>
+
+    <div class="form-error" id="pasarela-error"></div>
+    <button class="btn btn-primary btn-block" id="pasarela-pagar-btn">Pagar ahora</button>
+  </div>
+
+  <div class="pasarela-step" id="pasarela-step-procesando" hidden>
+    <div class="pasarela-spinner"></div>
+    <p>Procesando tu pago...</p>
+    <p class="pasarela-demo-note">No cierres esta ventana.</p>
+  </div>
+
+  <div class="pasarela-step" id="pasarela-step-exito" hidden>
+    <div class="pasarela-check">✓</div>
+    <h3>¡Pago confirmado!</h3>
+    <p>Pedido <strong id="exito-numero-pedido">#0</strong> — tus boletos ya están listos.</p>
+    <a href="dashboard.html#entradas" class="btn btn-primary btn-block">Ver mis boletos</a>
+    <a href="index.html" class="btn btn-ghost btn-block" style="margin-top:10px;">Volver al inicio</a>
+  </div>
+
+  <div class="pasarela-step" id="pasarela-step-error" hidden>
+    <div class="pasarela-check pasarela-check-error">✕</div>
+    <h3>No se pudo completar el pago</h3>
+    <p id="pasarela-error-mensaje"></p>
+    <button class="btn btn-primary btn-block" id="pasarela-reintentar-btn">Reintentar</button>
+  </div>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/carrito.js"></script>
+</body>
+</html>

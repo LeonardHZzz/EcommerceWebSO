@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Cuenta — YumeEvent</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container dashboard-layout">
+
+    <aside class="dashboard-sidebar">
+      <h2>Mi Cuenta</h2>
+      <nav class="dashboard-nav" id="dashboard-nav">
+        <a href="#escritorio" data-tab="escritorio" class="active">Escritorio</a>
+        <a href="#pedidos" data-tab="pedidos">Pedidos</a>
+        <a href="#detalles" data-tab="detalles">Detalles de la cuenta</a>
+        <a href="#entradas" data-tab="entradas">Entradas</a>
+        <a href="#" id="sidebar-logout">Cerrar Sesión</a>
+      </nav>
+    </aside>
+
+    <section class="dashboard-main">
+
+      <!-- Escritorio -->
+      <div class="dashboard-panel" id="panel-escritorio">
+        <p class="dashboard-welcome" id="dashboard-welcome">Cargando tu cuenta...</p>
+        <p>Desde el escritorio de tu cuenta puedes ver tus pedidos recientes, tus entradas compradas y editar los detalles de tu cuenta.</p>
+
+        <div class="quick-links">
+          <a href="#pedidos" class="quick-link" data-tab="pedidos">
+            <span class="quick-link-icon">🧾</span>
+            <span>Pedidos</span>
+          </a>
+          <a href="#entradas" class="quick-link" data-tab="entradas">
+            <span class="quick-link-icon">🎟</span>
+            <span>Entradas</span>
+          </a>
+          <a href="#detalles" class="quick-link" data-tab="detalles">
+            <span class="quick-link-icon">👤</span>
+            <span>Detalles de la cuenta</span>
+          </a>
+          <a href="#" class="quick-link" id="quick-link-logout">
+            <span class="quick-link-icon">↪</span>
+            <span>Cerrar Sesión</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Pedidos -->
+      <div class="dashboard-panel" id="panel-pedidos" hidden>
+        <h3>Tus pedidos</h3>
+        <div id="pedidos-list"><p>Cargando pedidos...</p></div>
+      </div>
+
+      <!-- Detalles de la cuenta -->
+      <div class="dashboard-panel" id="panel-detalles" hidden>
+        <h3>Detalles de la cuenta</h3>
+        <p>Actualiza tu nombre, correo, teléfono o contraseña.</p>
+
+        <div class="form-error" id="perfil-error"></div>
+        <div class="form-success" id="perfil-success">Tus datos se guardaron correctamente.</div>
+
+        <form id="perfil-form" class="perfil-form">
+          <div class="form-row">
+            <div class="field">
+              <label for="perfil-nombre">Nombre</label>
+              <input type="text" id="perfil-nombre" required>
+            </div>
+            <div class="field">
+              <label for="perfil-apellido">Apellido</label>
+              <input type="text" id="perfil-apellido" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="perfil-email">Correo electrónico</label>
+            <input type="email" id="perfil-email" required>
+          </div>
+
+          <div class="field">
+            <label for="perfil-telefono">Teléfono</label>
+            <input type="text" id="perfil-telefono">
+          </div>
+
+          <h4 class="form-subheading">Cambiar contraseña (opcional)</h4>
+          <div class="field">
+            <label for="perfil-password">Nueva contraseña</label>
+            <input type="password" id="perfil-password" minlength="6" placeholder="Déjalo en blanco para no cambiarla">
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="perfil-submit">Guardar cambios</button>
+        </form>
+      </div>
+
+      <!-- Entradas -->
+      <div class="dashboard-panel" id="panel-entradas" hidden>
+        <h3>Tus entradas</h3>
+        <div id="entradas-grid"><p>Cargando entradas...</p></div>
+      </div>
+
+    </section>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/dashboard.js"></script>
+</body>
+</html>

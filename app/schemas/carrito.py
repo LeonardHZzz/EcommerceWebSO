@@ -8,6 +8,10 @@ class CarritoItemCreate(BaseModel):
     cantidad: int = Field(gt=0)
 
 
+class CarritoItemUpdate(BaseModel):
+    cantidad: int = Field(gt=0)
+
+
 class CarritoItemOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

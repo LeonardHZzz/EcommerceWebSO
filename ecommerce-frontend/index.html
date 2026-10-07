@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YumeEvent — Entradas para eventos recreativos</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-heading">
+        <h1>Eventos que no te puedes perder</h1>
+        <div class="carousel-arrows">
+          <button class="carousel-arrow" id="hero-prev" aria-label="Anterior">‹</button>
+          <button class="carousel-arrow" id="hero-next" aria-label="Siguiente">›</button>
+        </div>
+      </div>
+      <div class="hero-track" id="hero-track">
+        <p class="error-text">Cargando eventos...</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tickets-section">
+    <div class="container">
+      <h2>Entradas disponibles</h2>
+      <div class="tickets-grid" id="tickets-grid">
+        <p class="error-text">Cargando entradas...</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-block">
+          <h3>Condiciones y políticas de acceso</h3>
+          <ul>
+            <li>La organización se reserva el derecho de admisión y la comprobación de identidad.</li>
+            <li>No se admiten devoluciones ni cambios una vez confirmada la compra.</li>
+            <li>Entrada gratuita para niños de 4 años a menos, acompañados de un adulto.</li>
+            <li>Cada boleto lleva un código QR único e intransferible, válido para un solo ingreso.</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>Métodos de pago</h3>
+          <ul>
+            <li>Tarjetas de crédito y débito (Visa, Mastercard, American Express).</li>
+            <li>Yape y Plin.</li>
+            <li>El pago se confirma automáticamente; tus boletos quedan disponibles en "Mis boletos".</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>¿Cómo funciona?</h3>
+          <ul>
+            <li>Elige tu entrada y agrégala al carrito.</li>
+            <li>Confirma tu compra y recibe tus boletos con código QR.</li>
+            <li>Presenta el QR en la puerta del evento el día del ingreso.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/carousel.js"></script>
+<script src="assets/js/landing.js"></script>
+</body>
+</html>

@@ -37,6 +37,32 @@ def checkout(
     )
 
 
+@router.post("/{id_orden}/simular-pago", response_model=OrdenOut)
+def simular_pago(
+    id_orden: int,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    SOLO PARA DEMO/DESARROLLO — no es un cobro real. Simula que la pasarela
+    de pago aprobó la transacción, para poder probar el flujo de compra de
+    punta a punta sin integrar un proveedor de pagos real todavía.
+
+    En producción, este endpoint se retira (o se deja detrás de un flag de
+    entorno) y la confirmación real llega únicamente por el webhook firmado
+    (POST /webhooks/pagos) o por un admin vía PATCH /{id_orden}/confirmar.
+    Por eso aquí SÍ se permite que el propio dueño de la orden la marque
+    como pagada — algo que jamás se permitiría con dinero real de por medio.
+    """
+    orden = _get_orden_o_404(db, id_orden)
+    if orden.id_usuario != current_user.id_usuario:
+        raise HTTPException(status_code=403, detail="No puedes pagar una orden que no es tuya")
+    try:
+        return confirmar_pago(db, orden)
+    except CompraError:
+        raise
+
+
 @router.get("", response_model=list[OrdenOut])
 def mis_ordenes(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
     return db.query(Orden).filter(Orden.id_usuario == current_user.id_usuario).all()
